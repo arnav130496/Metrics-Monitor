@@ -1,0 +1,11 @@
+Run a Docker compose file
+    docker compose up -d
+
+View Logs of a particular container
+    docker compose logs <container-name> --tail=50
+
+Enter Inside a docker container
+    docker exec -it $(docker ps -qf "ancestor=confluentinc/cp-kafka:7.5.0") bash
+
+
+
