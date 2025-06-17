@@ -1,19 +1,17 @@
 package com.arnav.metrics_monitor_producer_app.util;
 
 import com.arnav.metrics_monitor_producer_app.model.MetricEvent;
-
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
+@Slf4j
 public class MetricsProducer {
 
     private final KafkaTemplate<String, MetricEvent> kafkaTemplate;
-    private static final Logger log = LoggerFactory.getLogger(MetricsProducer.class);
 
     @Value("${app.kafka.topic}")
     private String topic;
