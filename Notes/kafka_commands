@@ -3,3 +3,6 @@ Create a Topic
 
 List all Topics
     kafka-topics --bootstrap-server kafka:9092 --list
+
+Consume messages from a topic
+    kafka-console-consumer --bootstrap-server kafka:9092 --topic app-metrics --from-beginning
