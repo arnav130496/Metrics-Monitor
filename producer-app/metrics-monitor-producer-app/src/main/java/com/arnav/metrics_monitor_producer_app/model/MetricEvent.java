@@ -1,12 +1,19 @@
 package com.arnav.metrics_monitor_producer_app.model;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MetricEvent implements Serializable {
     private String service;
     private String metric;
     private double value;
+    private String unit;
+    private Instant timestamp;
+    private Map<String, String> tags;
 
     public String getService() {
         return service;
@@ -55,10 +62,6 @@ public class MetricEvent implements Serializable {
     public void setTags(Map<String, String> tags) {
         this.tags = tags;
     }
-
-    private String unit;
-    private Instant timestamp;
-    private Map<String, String> tags;
 
     public MetricEvent(String service, String metric, double value, String unit, Instant timestamp, Map<String, String> tags) {
         this.service = service;

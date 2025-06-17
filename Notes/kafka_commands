@@ -1,5 +1,8 @@
 Create a Topic
-    kafka-topics --bootstrap-server kafka:9092 --create --topic app-metrics --partitions 1 --replication-factor 1
+    kafka-topics --bootstrap-server kafka:9092 --create --topic app-metrics --partitions 3 --replication-factor 1
+
+Delete a Topic
+    kafka-topics --bootstrap-server kafka:9092 --delete --topic app-metrics
 
 List all Topics
     kafka-topics --bootstrap-server kafka:9092 --list

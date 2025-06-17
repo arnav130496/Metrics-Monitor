@@ -23,7 +23,7 @@ public class MetricsProducer {
     }
 
     public void send(MetricEvent event) {
-        kafkaTemplate.send(topic, event);
+        kafkaTemplate.send(topic, event.getService(), event);
         log.info("📤 Sent metric: {}", event);
     }
     @PostConstruct
