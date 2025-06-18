@@ -1,4 +1,4 @@
-package com.arnav.metrics_monitor_producer_app.model;
+package com.arnav.metrics_monitor_consumer_app.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
