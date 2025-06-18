@@ -2,10 +2,12 @@ package com.arnav.metrics_monitor_producer_app.config;
 
 import com.arnav.metrics_monitor_producer_app.model.MetricEvent;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -18,10 +20,13 @@ import java.util.Map;
 
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class KafkaProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+
+    private final KafkaProperties kafkaProperties; // Declare KafkaProperties
 
     @Value("${app.kafka.topic}")
     private String topic;
@@ -31,10 +36,13 @@ public class KafkaProducerConfig {
 
     @Value("${spring.kafka.producer.retries}")
     private int retries;
+
     @Bean
     public ProducerFactory<String, MetricEvent> producerFactory() {
 
         Map<String, Object> props = new HashMap<>();
+//        Map<String, Object> props1 = new HashMap<>(kafkaProperties.buildProducerProperties());
+
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

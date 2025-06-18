@@ -9,7 +9,9 @@ spring:
       acks: all
       retries: 3
     properties:
-      spring.json.add.type.headers: false
+      spring.json.add.type.headers: true
 app:
   kafka:
     topic: app-metrics
+server:
+  port: 9797
