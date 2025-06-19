@@ -1,5 +1,13 @@
 version: '3.8'
 
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local
+
 services:
 
   zookeeper:
@@ -20,6 +28,7 @@ services:
       - zookeeper
     ports:
       - "9092:9092" # Only map the external port to your host
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -57,7 +66,7 @@ services:
     networks:
       - app-network
 
-  metrics-api-app:
+  metrics-api-app: 
     build:
       context: ../api-service/metrics-api-app
       dockerfile: Dockerfile
@@ -68,6 +77,37 @@ services:
       MONGO_URI: "mongodb://admin:password@mongodb:27017/metrics_monitor_db?authSource=admin"
       SPRING_APPLICATION_NAME: metrics-api-app
     depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  metrics-producer-app:
+    build:
+      context: ../producer-app/metrics-monitor-producer-app # Correct build context
+      dockerfile: Dockerfile
+    container_name: metrics-producer-app
+    ports:
+      - "9797:9797" # Expose Producer's server port for Actuator/health
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_APPLICATION_NAME: metrics-producer-app
+    depends_on:
+      - kafka
+    networks:
+      - app-network
+
+  metrics-consumer-app:
+    build:
+      context: ../consumer-app/metrics-monitor-consumer-app # Correct build context
+      dockerfile: Dockerfile
+    container_name: metrics-consumer-app
+    ports:
+      - "6060:6060"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_APPLICATION_NAME: metrics-consumer-app
+    depends_on:
+      - kafka
       - mongodb
     networks:
       - app-network
@@ -97,12 +137,3 @@ services:
       - prometheus
     networks:
       - app-network
-
-networks:
-  app-network:
-    driver: bridge
-
-volumes: # <--- NEW: Define the named volume here
-  mongodb_data:
-    # driver: local (this is the default and can be omitted)
-    # You can also add options for driver, labels, etc., but often not needed for simple persistence.

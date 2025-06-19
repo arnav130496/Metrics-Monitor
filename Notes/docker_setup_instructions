@@ -7,5 +7,7 @@ View Logs of a particular container
 Enter Inside a docker container
     docker exec -it $(docker ps -qf "ancestor=confluentinc/cp-kafka:7.5.0") bash
 
+    bash docker exec -it metrics-producer-app sh
 
-
+Delete and remove everything mapped to docker compose
+    docker compose down --volumes --rmi all

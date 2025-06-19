@@ -15,3 +15,12 @@ app:
     topic: app-metrics
 server:
   port: 9797
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true

@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    bootstrap-servers: kafka:29092
+  data:
+    mongodb:
+      uri: mongodb://admin:password@mongodb:27017/metrics_monitor_db?authSource=admin

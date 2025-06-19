@@ -14,3 +14,15 @@ scrape_configs:
     metrics_path: '/actuator/prometheus' # The endpoint Spring Boot exposes metrics
     static_configs:
       - targets: ['metrics-api-app:5050'] # IMPORTANT: Use the Docker service name and correct internal port (5050)
+
+  # Job to scrape your Producer app
+  - job_name: 'metrics-producer-app'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['metrics-producer-app:9797'] # Docker service name and internal port
+
+  # Job to scrape your Consumer app
+  - job_name: 'metrics-consumer-app'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['metrics-consumer-app:6060'] # Docker service name and UPDATED internal port
