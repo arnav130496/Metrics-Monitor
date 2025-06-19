@@ -1,0 +1,16 @@
+# prometheus.yml
+global:
+  scrape_interval: 15s # How frequently to scrape targets
+  evaluation_interval: 15s # How frequently to evaluate rules
+
+scrape_configs:
+  # Job to scrape Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090'] # Prometheus scrapes its own metrics
+
+  # Job to scrape your metrics-api-app
+  - job_name: 'metrics-api-app'
+    metrics_path: '/actuator/prometheus' # The endpoint Spring Boot exposes metrics
+    static_configs:
+      - targets: ['metrics-api-app:5050'] # IMPORTANT: Use the Docker service name and correct internal port (5050)

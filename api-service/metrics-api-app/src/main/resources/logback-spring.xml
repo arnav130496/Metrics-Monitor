@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <level>log_level</level>
+                <thread>thread_name</thread>
+                <logger>logger_name</logger>
+                <message>message</message>
+                <version>[ignore]</version>
+                <logstashTags>[ignore]</logstashTags>
+                <caller>[ignore]</caller>
+            </fieldNames>
+
+            <customFields>{"application":"${APP_NAME}"}</customFields>
+
+            <mdc>
+                <includeMdcKeyName>correlationId</includeMdcKeyName>
+            </mdc>
+
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                <maxDepthPerThrowable>20</maxDepthPerThrowable>
+                <maxLength>2048</maxLength>
+                <rootCauseFirst>true</rootCauseFirst>
+            </throwableConverter>
+        </encoder>
+    </appender>
+
+    <logger name="com.arnav.metrics_api_app" level="INFO" />
+    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="org.springframework.kafka" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.mongodb.driver" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_JSON"/>
+    </root>
+
+</configuration>

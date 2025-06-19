@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: metrics-api-app
+  data:
+    mongodb:
+      uri: mongodb://admin:password@mongodb:27017/metrics_monitor_db?authSource=admin
+server:
+  port: 5050 # Or any desired port, e.g., 9090 to avoid conflict if consumer/producer run on default
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+logging:
+# Your new JSON logging configuration (copy from consumer)
