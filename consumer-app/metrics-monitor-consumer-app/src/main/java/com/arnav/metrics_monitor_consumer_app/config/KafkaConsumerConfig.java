@@ -1,7 +1,9 @@
 package com.arnav.metrics_monitor_consumer_app.config;
 
 import com.arnav.metrics_monitor_consumer_app.model.MetricEvent; // Ensure this import is correct
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -12,6 +14,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.MicrometerConsumerListener;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
@@ -21,6 +24,7 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
@@ -28,6 +32,8 @@ public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
+
+    private final MeterRegistry meterRegistry;
 
     // Removed @Value("${spring.kafka.consumer.properties.spring.json.value.default.type}")
     // The value will now be hardcoded or taken from a simpler custom property.
@@ -52,7 +58,10 @@ public class KafkaConsumerConfig {
 
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
 
-        return new DefaultKafkaConsumerFactory<>(props);
+        DefaultKafkaConsumerFactory<String, MetricEvent> factory = new DefaultKafkaConsumerFactory<>(props);
+        factory.addListener(new MicrometerConsumerListener<>(meterRegistry));
+
+        return factory;
     }
 
     @Bean

@@ -103,9 +103,11 @@ services:
     container_name: metrics-consumer-app
     ports:
       - "6060:6060"
+      - "9001:9001"
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_APPLICATION_NAME: metrics-consumer-app
+      JAVA_TOOL_OPTIONS: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=9001 -Dcom.sun.management.jmxremote.rmi.port=9001 -Djava.rmi.server.hostname=localhost
     depends_on:
       - kafka
       - mongodb
